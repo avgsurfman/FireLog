@@ -28,223 +28,226 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.StatusText = new System.Windows.Forms.Label();
-            this.listBox2 = new System.Windows.Forms.ListBox();
-            this.listBox3 = new System.Windows.Forms.ListBox();
-            this.listBox4 = new System.Windows.Forms.ListBox();
-            this.listBox5 = new System.Windows.Forms.ListBox();
-            this.listBox6 = new System.Windows.Forms.ListBox();
-            this.buttonOpenFile = new System.Windows.Forms.Button();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.fullLogBox = new System.Windows.Forms.ListBox();
-            this.LoadButton = new System.Windows.Forms.Button();
-            this.FileLocationTextBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            TypeListBox = new System.Windows.Forms.ListBox();
+            StatusText = new System.Windows.Forms.Label();
+            DateListBox = new System.Windows.Forms.ListBox();
+            TimeListBox = new System.Windows.Forms.ListBox();
+            SourceListBox = new System.Windows.Forms.ListBox();
+            DestListBox = new System.Windows.Forms.ListBox();
+            TransportListBox = new System.Windows.Forms.ListBox();
+            buttonOpenFile = new System.Windows.Forms.Button();
+            openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            fullLogBox = new System.Windows.Forms.ListBox();
+            LoadButton = new System.Windows.Forms.Button();
+            FileLocationTextBox = new System.Windows.Forms.TextBox();
+            label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            label3 = new System.Windows.Forms.Label();
+            label4 = new System.Windows.Forms.Label();
+            label5 = new System.Windows.Forms.Label();
+            label6 = new System.Windows.Forms.Label();
+            SuspendLayout();
             // 
-            // listBox1
+            // TypeListBox
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 25;
-            this.listBox1.Location = new System.Drawing.Point(23, 402);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(158, 254);
-            this.listBox1.TabIndex = 0;
+            TypeListBox.FormattingEnabled = true;
+            TypeListBox.Location = new System.Drawing.Point(25, 515);
+            TypeListBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            TypeListBox.Name = "TypeListBox";
+            TypeListBox.Size = new System.Drawing.Size(171, 324);
+            TypeListBox.TabIndex = 0;
             // 
             // StatusText
             // 
-            this.StatusText.AutoSize = true;
-            this.StatusText.Location = new System.Drawing.Point(18, 678);
-            this.StatusText.Name = "StatusText";
-            this.StatusText.Size = new System.Drawing.Size(115, 25);
-            this.StatusText.TabIndex = 1;
-            this.StatusText.Text = "StatusText";
-            this.StatusText.Click += new System.EventHandler(this.StatusText_Click);
+            StatusText.AutoSize = true;
+            StatusText.Location = new System.Drawing.Point(20, 868);
+            StatusText.Name = "StatusText";
+            StatusText.Size = new System.Drawing.Size(121, 32);
+            StatusText.TabIndex = 1;
+            StatusText.Text = "StatusText";
+            StatusText.Click += StatusText_Click;
             // 
-            // listBox2
+            // DateListBox
             // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.ItemHeight = 25;
-            this.listBox2.Location = new System.Drawing.Point(187, 402);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(158, 254);
-            this.listBox2.TabIndex = 2;
+            DateListBox.FormattingEnabled = true;
+            DateListBox.Location = new System.Drawing.Point(203, 515);
+            DateListBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            DateListBox.Name = "DateListBox";
+            DateListBox.Size = new System.Drawing.Size(171, 324);
+            DateListBox.TabIndex = 2;
             // 
-            // listBox3
+            // TimeListBox
             // 
-            this.listBox3.FormattingEnabled = true;
-            this.listBox3.ItemHeight = 25;
-            this.listBox3.Location = new System.Drawing.Point(351, 402);
-            this.listBox3.Name = "listBox3";
-            this.listBox3.Size = new System.Drawing.Size(158, 254);
-            this.listBox3.TabIndex = 3;
+            TimeListBox.FormattingEnabled = true;
+            TimeListBox.Location = new System.Drawing.Point(380, 515);
+            TimeListBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            TimeListBox.Name = "TimeListBox";
+            TimeListBox.Size = new System.Drawing.Size(171, 324);
+            TimeListBox.TabIndex = 3;
             // 
-            // listBox4
+            // SourceListBox
             // 
-            this.listBox4.FormattingEnabled = true;
-            this.listBox4.ItemHeight = 25;
-            this.listBox4.Location = new System.Drawing.Point(515, 402);
-            this.listBox4.Name = "listBox4";
-            this.listBox4.Size = new System.Drawing.Size(164, 254);
-            this.listBox4.TabIndex = 4;
+            SourceListBox.FormattingEnabled = true;
+            SourceListBox.Location = new System.Drawing.Point(558, 515);
+            SourceListBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            SourceListBox.Name = "SourceListBox";
+            SourceListBox.Size = new System.Drawing.Size(177, 324);
+            SourceListBox.TabIndex = 4;
             // 
-            // listBox5
+            // DestListBox
             // 
-            this.listBox5.FormattingEnabled = true;
-            this.listBox5.ItemHeight = 25;
-            this.listBox5.Location = new System.Drawing.Point(685, 402);
-            this.listBox5.Name = "listBox5";
-            this.listBox5.Size = new System.Drawing.Size(152, 254);
-            this.listBox5.TabIndex = 5;
+            DestListBox.FormattingEnabled = true;
+            DestListBox.Location = new System.Drawing.Point(742, 515);
+            DestListBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            DestListBox.Name = "DestListBox";
+            DestListBox.Size = new System.Drawing.Size(164, 324);
+            DestListBox.TabIndex = 5;
             // 
-            // listBox6
+            // TransportListBox
             // 
-            this.listBox6.FormattingEnabled = true;
-            this.listBox6.ItemHeight = 25;
-            this.listBox6.Location = new System.Drawing.Point(843, 402);
-            this.listBox6.Name = "listBox6";
-            this.listBox6.Size = new System.Drawing.Size(171, 254);
-            this.listBox6.TabIndex = 6;
+            TransportListBox.FormattingEnabled = true;
+            TransportListBox.Location = new System.Drawing.Point(913, 515);
+            TransportListBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            TransportListBox.Name = "TransportListBox";
+            TransportListBox.Size = new System.Drawing.Size(185, 324);
+            TransportListBox.TabIndex = 6;
             // 
             // buttonOpenFile
             // 
-            this.buttonOpenFile.Location = new System.Drawing.Point(685, 30);
-            this.buttonOpenFile.Name = "buttonOpenFile";
-            this.buttonOpenFile.Size = new System.Drawing.Size(134, 61);
-            this.buttonOpenFile.TabIndex = 7;
-            this.buttonOpenFile.Text = "Open File";
-            this.buttonOpenFile.UseVisualStyleBackColor = true;
-            this.buttonOpenFile.Click += new System.EventHandler(this.buttonOpenFile_Click);
+            buttonOpenFile.Location = new System.Drawing.Point(742, 38);
+            buttonOpenFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            buttonOpenFile.Name = "buttonOpenFile";
+            buttonOpenFile.Size = new System.Drawing.Size(164, 78);
+            buttonOpenFile.TabIndex = 7;
+            buttonOpenFile.Text = "Open File";
+            buttonOpenFile.UseVisualStyleBackColor = true;
+            buttonOpenFile.Click += buttonOpenFile_Click;
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
+            openFileDialog1.FileName = "openFileDialog1";
+            openFileDialog1.FileOk += openFileDialog1_FileOk;
             // 
             // fullLogBox
             // 
-            this.fullLogBox.FormattingEnabled = true;
-            this.fullLogBox.ItemHeight = 25;
-            this.fullLogBox.Location = new System.Drawing.Point(23, 114);
-            this.fullLogBox.Name = "fullLogBox";
-            this.fullLogBox.Size = new System.Drawing.Size(991, 229);
-            this.fullLogBox.TabIndex = 8;
+            fullLogBox.FormattingEnabled = true;
+            fullLogBox.Location = new System.Drawing.Point(25, 146);
+            fullLogBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            fullLogBox.Name = "fullLogBox";
+            fullLogBox.Size = new System.Drawing.Size(1073, 292);
+            fullLogBox.TabIndex = 8;
             // 
             // LoadButton
             // 
-            this.LoadButton.Location = new System.Drawing.Point(23, 30);
-            this.LoadButton.Name = "LoadButton";
-            this.LoadButton.Size = new System.Drawing.Size(134, 61);
-            this.LoadButton.TabIndex = 9;
-            this.LoadButton.Text = "Load";
-            this.LoadButton.UseVisualStyleBackColor = true;
-            this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
+            LoadButton.Location = new System.Drawing.Point(25, 38);
+            LoadButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            LoadButton.Name = "LoadButton";
+            LoadButton.Size = new System.Drawing.Size(145, 78);
+            LoadButton.TabIndex = 9;
+            LoadButton.Text = "Load";
+            LoadButton.UseVisualStyleBackColor = true;
+            LoadButton.Click += LoadButton_Click;
             // 
             // FileLocationTextBox
             // 
-            this.FileLocationTextBox.Location = new System.Drawing.Point(187, 45);
-            this.FileLocationTextBox.Name = "FileLocationTextBox";
-            this.FileLocationTextBox.Size = new System.Drawing.Size(462, 31);
-            this.FileLocationTextBox.TabIndex = 10;
+            FileLocationTextBox.Location = new System.Drawing.Point(203, 58);
+            FileLocationTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            FileLocationTextBox.Name = "FileLocationTextBox";
+            FileLocationTextBox.Size = new System.Drawing.Size(500, 39);
+            FileLocationTextBox.TabIndex = 10;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 365);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 25);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "label1";
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(20, 467);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(65, 32);
+            label1.TabIndex = 11;
+            label1.Text = "Type";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(182, 365);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(70, 25);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "label2";
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(197, 467);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(64, 32);
+            label2.TabIndex = 12;
+            label2.Text = "Date";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(346, 365);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(70, 25);
-            this.label3.TabIndex = 13;
-            this.label3.Text = "label3";
+            label3.AutoSize = true;
+            label3.Location = new System.Drawing.Point(375, 467);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(67, 32);
+            label3.TabIndex = 13;
+            label3.Text = "Time";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(510, 365);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 25);
-            this.label4.TabIndex = 14;
-            this.label4.Text = "label4";
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(552, 467);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(87, 32);
+            label4.TabIndex = 14;
+            label4.Text = "Source";
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(680, 365);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(70, 25);
-            this.label5.TabIndex = 15;
-            this.label5.Text = "label5";
+            label5.AutoSize = true;
+            label5.Location = new System.Drawing.Point(737, 467);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(136, 32);
+            label5.TabIndex = 15;
+            label5.Text = "Destination";
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(838, 365);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(70, 25);
-            this.label6.TabIndex = 16;
-            this.label6.Text = "label6";
+            label6.AutoSize = true;
+            label6.Location = new System.Drawing.Point(908, 467);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(113, 32);
+            label6.TabIndex = 16;
+            label6.Text = "Transport";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1060, 728);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.FileLocationTextBox);
-            this.Controls.Add(this.LoadButton);
-            this.Controls.Add(this.fullLogBox);
-            this.Controls.Add(this.buttonOpenFile);
-            this.Controls.Add(this.listBox6);
-            this.Controls.Add(this.listBox5);
-            this.Controls.Add(this.listBox4);
-            this.Controls.Add(this.listBox3);
-            this.Controls.Add(this.listBox2);
-            this.Controls.Add(this.StatusText);
-            this.Controls.Add(this.listBox1);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(1148, 932);
+            Controls.Add(label6);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(FileLocationTextBox);
+            Controls.Add(LoadButton);
+            Controls.Add(fullLogBox);
+            Controls.Add(buttonOpenFile);
+            Controls.Add(TransportListBox);
+            Controls.Add(DestListBox);
+            Controls.Add(SourceListBox);
+            Controls.Add(TimeListBox);
+            Controls.Add(DateListBox);
+            Controls.Add(StatusText);
+            Controls.Add(TypeListBox);
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            Name = "Form1";
+            Text = "Form1";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox TypeListBox;
         private System.Windows.Forms.Label StatusText;
-        private System.Windows.Forms.ListBox listBox2;
-        private System.Windows.Forms.ListBox listBox3;
-        private System.Windows.Forms.ListBox listBox4;
-        private System.Windows.Forms.ListBox listBox5;
-        private System.Windows.Forms.ListBox listBox6;
+        private System.Windows.Forms.ListBox DateListBox;
+        private System.Windows.Forms.ListBox TimeListBox;
+        private System.Windows.Forms.ListBox SourceListBox;
+        private System.Windows.Forms.ListBox DestListBox;
+        private System.Windows.Forms.ListBox TransportListBox;
         private System.Windows.Forms.Button buttonOpenFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ListBox fullLogBox;
