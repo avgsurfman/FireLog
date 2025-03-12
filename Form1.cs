@@ -154,5 +154,10 @@ namespace Lab2
             AboutForm aboutForm = new AboutForm();
             aboutForm.ShowDialog();
         }
+
+        private void StatusText_Click(object sender, EventArgs e)
+        {
+            this.StatusText.Text = "Boop!";
+        }
     }
 }

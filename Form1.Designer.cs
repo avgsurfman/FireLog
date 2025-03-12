@@ -54,7 +54,7 @@
             TypeListBox.FormattingEnabled = true;
             TypeListBox.ItemHeight = 15;
             TypeListBox.Location = new System.Drawing.Point(13, 241);
-            TypeListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            TypeListBox.Margin = new System.Windows.Forms.Padding(2);
             TypeListBox.Name = "TypeListBox";
             TypeListBox.Size = new System.Drawing.Size(94, 154);
             TypeListBox.TabIndex = 0;
@@ -68,13 +68,14 @@
             StatusText.Size = new System.Drawing.Size(60, 15);
             StatusText.TabIndex = 1;
             StatusText.Text = "StatusText";
+            StatusText.Click += StatusText_Click;
             // 
             // DateListBox
             // 
             DateListBox.FormattingEnabled = true;
             DateListBox.ItemHeight = 15;
             DateListBox.Location = new System.Drawing.Point(109, 241);
-            DateListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            DateListBox.Margin = new System.Windows.Forms.Padding(2);
             DateListBox.Name = "DateListBox";
             DateListBox.Size = new System.Drawing.Size(94, 154);
             DateListBox.TabIndex = 2;
@@ -84,7 +85,7 @@
             TimeListBox.FormattingEnabled = true;
             TimeListBox.ItemHeight = 15;
             TimeListBox.Location = new System.Drawing.Point(205, 241);
-            TimeListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            TimeListBox.Margin = new System.Windows.Forms.Padding(2);
             TimeListBox.Name = "TimeListBox";
             TimeListBox.Size = new System.Drawing.Size(94, 154);
             TimeListBox.TabIndex = 3;
@@ -94,7 +95,7 @@
             SourceListBox.FormattingEnabled = true;
             SourceListBox.ItemHeight = 15;
             SourceListBox.Location = new System.Drawing.Point(300, 241);
-            SourceListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            SourceListBox.Margin = new System.Windows.Forms.Padding(2);
             SourceListBox.Name = "SourceListBox";
             SourceListBox.Size = new System.Drawing.Size(97, 154);
             SourceListBox.TabIndex = 4;
@@ -104,7 +105,7 @@
             DestListBox.FormattingEnabled = true;
             DestListBox.ItemHeight = 15;
             DestListBox.Location = new System.Drawing.Point(400, 241);
-            DestListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            DestListBox.Margin = new System.Windows.Forms.Padding(2);
             DestListBox.Name = "DestListBox";
             DestListBox.Size = new System.Drawing.Size(90, 154);
             DestListBox.TabIndex = 5;
@@ -114,7 +115,7 @@
             TransportListBox.FormattingEnabled = true;
             TransportListBox.ItemHeight = 15;
             TransportListBox.Location = new System.Drawing.Point(492, 241);
-            TransportListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            TransportListBox.Margin = new System.Windows.Forms.Padding(2);
             TransportListBox.Name = "TransportListBox";
             TransportListBox.Size = new System.Drawing.Size(101, 154);
             TransportListBox.TabIndex = 6;
@@ -122,7 +123,7 @@
             // buttonOpenFile
             // 
             buttonOpenFile.Location = new System.Drawing.Point(400, 18);
-            buttonOpenFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            buttonOpenFile.Margin = new System.Windows.Forms.Padding(2);
             buttonOpenFile.Name = "buttonOpenFile";
             buttonOpenFile.Size = new System.Drawing.Size(88, 37);
             buttonOpenFile.TabIndex = 7;
@@ -140,7 +141,7 @@
             fullLogBox.FormattingEnabled = true;
             fullLogBox.ItemHeight = 15;
             fullLogBox.Location = new System.Drawing.Point(13, 68);
-            fullLogBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            fullLogBox.Margin = new System.Windows.Forms.Padding(2);
             fullLogBox.Name = "fullLogBox";
             fullLogBox.Size = new System.Drawing.Size(580, 139);
             fullLogBox.TabIndex = 8;
@@ -148,7 +149,7 @@
             // LoadButton
             // 
             LoadButton.Location = new System.Drawing.Point(13, 18);
-            LoadButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            LoadButton.Margin = new System.Windows.Forms.Padding(2);
             LoadButton.Name = "LoadButton";
             LoadButton.Size = new System.Drawing.Size(78, 37);
             LoadButton.TabIndex = 9;
@@ -159,7 +160,7 @@
             // FileLocationTextBox
             // 
             FileLocationTextBox.Location = new System.Drawing.Point(109, 27);
-            FileLocationTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            FileLocationTextBox.Margin = new System.Windows.Forms.Padding(2);
             FileLocationTextBox.Name = "FileLocationTextBox";
             FileLocationTextBox.Size = new System.Drawing.Size(271, 23);
             FileLocationTextBox.TabIndex = 10;
@@ -233,7 +234,7 @@
             button1.TabIndex = 17;
             button1.Text = "About";
             button1.UseVisualStyleBackColor = true;
-            button1.Click +=  About_Click;
+            button1.Click += About_Click;
             // 
             // Form1
             // 
@@ -258,7 +259,7 @@
             Controls.Add(DateListBox);
             Controls.Add(StatusText);
             Controls.Add(TypeListBox);
-            Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            Margin = new System.Windows.Forms.Padding(2);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
