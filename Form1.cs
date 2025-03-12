@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Lab2_WHDIBW;
+using static System.Windows.Forms.LinkLabel;
 
 namespace Lab2
 {
     public partial class Form1 : Form
     {
-        List<string> Type,Date, Time,Source,Destination,Transport;
+        List<string> Type, Date, Time, Source, Destination, Transport;
 
         public Form1()
         {
@@ -29,7 +31,8 @@ namespace Lab2
 
         // clear items
 
-        public void ListClearItems() { 
+        public void ListClearItems()
+        {
             Console.WriteLine("Clearing items...");
             this.fullLogBox.Items.Clear();
             this.Type.Clear();
@@ -52,11 +55,6 @@ namespace Lab2
 
         }
 
-        private void StatusText_Click(object sender, EventArgs e)
-        {
-            this.StatusText.Text = "Boop!";
-        }
-
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
 
@@ -71,27 +69,29 @@ namespace Lab2
             {
                 string file = openFileDialog1.FileName;
                 this.StatusText.Text = "File selected:" + file; // Stringformat fails here - why?
-                this.FileLocationTextBox.Text = file;   
+                this.FileLocationTextBox.Text = file;
             }
-            
+
         }
 
         private void LoadButton_Click(object sender, EventArgs e)
         {
             ListClearItems();
 
-            try {
-
+            try
+            {
+                int lineCounter = 0;
                 const Int32 BufferSize = 512; // sector size on Windows
                 using FileStream fs = new FileStream(this.FileLocationTextBox.Text, FileMode.Open, FileAccess.Read);
-                    using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8); //convert encodings later
+                using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8); //convert encodings later
                 String line;
                 while ((line = sr.ReadLine()) != null)
                 {
+                    lineCounter++;
                     this.fullLogBox.Items.Add(line);
-
                     Array values = line.Split(',');
                     if (values.Length != 6) continue;
+                    if (line.Contains("type,date,time")) continue;
                     else
                     {
                         this.StatusText.Text = "Trying to append" + values.ToString();
@@ -103,12 +103,9 @@ namespace Lab2
                         this.Destination.Add(values.GetValue(4).ToString());
                         this.Transport.Add(values.GetValue(5).ToString());
                     }
-
-                 
-
-
                 }
 
+                this.StatusText.Text = $"Loaded {lineCounter} files of data";
                 //rebind listboxes
                 TypeListBox.DataSource = this.Type;
                 DateListBox.DataSource = this.Date;
@@ -120,9 +117,9 @@ namespace Lab2
                 sr.Close();
                 fs.Close();
 
-                
 
-       
+
+
 
             }
             catch (IOException err)
@@ -130,25 +127,37 @@ namespace Lab2
                 this.StatusText.Text = String.Format("Error: {err}", err.Message);
             }
 
-            catch (ArgumentException err) {
-                
+            catch (ArgumentException err)
+            {
+
                 // show messagebox
                 if (err.Message == "The value cannot be an empty string. (Parameter 'path')")
                 {
                     string msg = "Valid path cannot be empty, please select a file first.";
                     string caption = "Invalid Path";
                     MessageBox.Show(msg, caption,
-                        MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     //https://stackoverflow.com/questions/2109441/how-to-show-a-custom-error-or-warning-message-box-in-net-winforms
                 }
                 else
                 {
-                    this.StatusText.Text = "Error: " + err.Message; 
+                    this.StatusText.Text = "Error: " + err.Message;
                 }
-                
-                
+
+
 
             }
+        }
+
+        private void About_Click(object sender, EventArgs e)
+        {
+            AboutForm aboutForm = new AboutForm();
+            aboutForm.ShowDialog();
+        }
+
+        private void StatusText_Click(object sender, EventArgs e)
+        {
+            this.StatusText.Text = "Boop!";
         }
     }
 }
