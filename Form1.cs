@@ -10,6 +10,9 @@ using System.Windows.Forms;
 using System.IO;
 using Lab2_WHDIBW;
 using static System.Windows.Forms.LinkLabel;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using System.Security.Cryptography.Xml;
 
 namespace Lab2
 {
@@ -26,6 +29,8 @@ namespace Lab2
             this.Source = new List<string>();
             this.Destination = new List<string>();
             this.Transport = new List<string>();
+
+            this.StatusText.Text = "Welcome.";
 
         }
 
@@ -82,19 +87,19 @@ namespace Lab2
             {
                 int lineCounter = 0;
                 const Int32 BufferSize = 512; // sector size on Windows
+                const string Ignore = "type,date,time,source,destination,transport";
                 using FileStream fs = new FileStream(this.FileLocationTextBox.Text, FileMode.Open, FileAccess.Read);
                 using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8); //convert encodings later
-                String line;
+                string line;
                 while ((line = sr.ReadLine()) != null)
                 {
                     lineCounter++;
                     this.fullLogBox.Items.Add(line);
                     Array values = line.Split(',');
-                    if (values.Length != 6) continue;
-                    if (line.Contains("type,date,time")) continue;
-                    else
+                    if (values.Length != 6) continue; // might want to implement a csv parser at some point
+                    if (line != Ignore) 
                     {
-                        this.StatusText.Text = "Trying to append" + values.ToString();
+                        // this.StatusText.Text = "Trying to append" + values.ToString();
                         // TODO : unpack this in a pythonic way
                         this.Type.Add(values.GetValue(0).ToString());
                         this.Date.Add(values.GetValue(1).ToString());
@@ -105,7 +110,7 @@ namespace Lab2
                     }
                 }
 
-                this.StatusText.Text = $"Loaded {lineCounter} files of data";
+                this.StatusText.Text = $"Loaded {lineCounter} lines of data from the file.";
                 //rebind listboxes
                 TypeListBox.DataSource = this.Type;
                 DateListBox.DataSource = this.Date;
@@ -124,7 +129,7 @@ namespace Lab2
             }
             catch (IOException err)
             {
-                this.StatusText.Text = String.Format("Error: {err}", err.Message);
+                this.StatusText.Text = string.Format("Error: {err}", err.Message);
             }
 
             catch (ArgumentException err)
@@ -157,7 +162,14 @@ namespace Lab2
 
         private void StatusText_Click(object sender, EventArgs e)
         {
-            this.StatusText.Text = "Boop!";
+
+            if (this.StatusText.Text == "Welcome." || this.StatusText.Text == "Boop!") this.StatusText.Text = "Boop!";
+            else if (this.StatusText.Text != "Copied to clipboard.")
+            {
+                // copy to clipboard
+                Clipboard.SetText(this.StatusText.Text);
+                this.StatusText.Text = "Copied to clipboard.";
+            }
         }
     }
 }
