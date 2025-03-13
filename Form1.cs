@@ -13,6 +13,7 @@ using static System.Windows.Forms.LinkLabel;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using System.Security.Cryptography.Xml;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace Lab2
 {
@@ -69,7 +70,9 @@ namespace Lab2
         {
             // Show the open file dialog
             DialogResult result = openFileDialog1.ShowDialog();
-            // I need the fucking signal somehow
+            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog1.Title = "Select a log file...";
+            openFileDialog1.InitialDirectory = @"C:\";
             if (result == DialogResult.OK)
             {
                 string file = openFileDialog1.FileName;
@@ -87,7 +90,7 @@ namespace Lab2
             {
                 int lineCounter = 0;
                 const Int32 BufferSize = 512; // sector size on Windows
-                const string Ignore = "type,date,time,source,destination,transport";
+                const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
                 using FileStream fs = new FileStream(this.FileLocationTextBox.Text, FileMode.Open, FileAccess.Read);
                 using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8); //convert encodings later
                 string line;
@@ -97,7 +100,7 @@ namespace Lab2
                     this.fullLogBox.Items.Add(line);
                     Array values = line.Split(',');
                     if (values.Length != 6) continue; // might want to implement a csv parser at some point
-                    if (line != Ignore) 
+                    if (line.Contains(Ignore)) 
                     {
                         // this.StatusText.Text = "Trying to append" + values.ToString();
                         // TODO : unpack this in a pythonic way
