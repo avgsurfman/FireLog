@@ -64,14 +64,14 @@
             pictureBox1.Location = new System.Drawing.Point(38, 42);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new System.Drawing.Size(264, 187);
-            pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 2;
             pictureBox1.TabStop = false;
             // 
             // linkLabel1
             // 
             linkLabel1.AutoSize = true;
-            linkLabel1.Location = new System.Drawing.Point(55, 309);
+            linkLabel1.Location = new System.Drawing.Point(55, 299);
             linkLabel1.Name = "linkLabel1";
             linkLabel1.Size = new System.Drawing.Size(634, 32);
             linkLabel1.TabIndex = 3;
