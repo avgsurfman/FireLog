@@ -92,7 +92,7 @@ namespace Lab2
                 const Int32 BufferSize = 512; // sector size on Windows
                 const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
                 using FileStream fs = new FileStream(this.FileLocationTextBox.Text, FileMode.Open, FileAccess.Read);
-                using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8); //convert encodings later
+                using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);//,true, BufferSize); //convert encodings later
                 string line;
                 while ((line = sr.ReadLine()) != null)
                 {
@@ -100,7 +100,7 @@ namespace Lab2
                     this.fullLogBox.Items.Add(line);
                     Array values = line.Split(',');
                     if (values.Length != 6) continue; // might want to implement a csv parser at some point
-                    if (line.Contains(Ignore)) 
+                    if (!line.Contains(Ignore)) 
                     {
                         // this.StatusText.Text = "Trying to append" + values.ToString();
                         // TODO : unpack this in a pythonic way
