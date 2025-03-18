@@ -1,26 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Lab2_WHDIBW;
-using static System.Windows.Forms.LinkLabel;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
-using System.Security.Cryptography.Xml;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Lab2
 {
     public partial class Form1 : Form
     {
         List<string> Type, Date, Time, Source, Destination, Transport;
+        private string directoryPath;
+        private int lineCounter;
 
         public Form1()
         {
@@ -83,13 +74,59 @@ namespace Lab2
 
         }
 
+        void SearchFiles()
+        {
+            string searchPattern = "*.txt";
+            string[] files = Directory.GetFiles(directoryPath, searchPattern);
+            foreach (string file in files)
+            {
+                this.FileLocationTextBox.Text = file;
+                ReadFile();
+            }
+            this.FileLocationTextBox.Text = directoryPath;
+        }
+
         private void LoadButton_Click(object sender, EventArgs e)
         {
             ListClearItems();
+            SearchFiles();
+        }
 
+
+        private void About_Click(object sender, EventArgs e)
+        {
+            AboutForm aboutForm = new AboutForm();
+            aboutForm.ShowDialog();
+        }
+
+        private void StatusText_Click(object sender, EventArgs e)
+        {
+
+            if (this.StatusText.Text == "Welcome." || this.StatusText.Text == "Boop!") this.StatusText.Text = "Boop!";
+            else if (this.StatusText.Text != "Copied to clipboard.")
+            {
+                // copy to clipboard
+                Clipboard.SetText(this.StatusText.Text);
+                this.StatusText.Text = "Copied to clipboard.";
+            }
+        }
+
+        private void BatchImport_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                directoryPath = fbd.SelectedPath;
+                this.StatusText.Text = "Directory selected: " + directoryPath;
+                this.FileLocationTextBox.Text = directoryPath;
+            }
+        }
+
+
+        void ReadFile()
+        {
             try
             {
-                int lineCounter = 0;
                 const Int32 BufferSize = 512; // sector size on Windows
                 const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
                 using FileStream fs = new FileStream(this.FileLocationTextBox.Text, FileMode.Open, FileAccess.Read);
@@ -114,7 +151,7 @@ namespace Lab2
                     }
                 }
 
-                this.StatusText.Text = $"Loaded {lineCounter} lines of data from the file.";
+                this.StatusText.Text = $"Loaded {lineCounter} lines of data from the files.";
                 //rebind listboxes
                 TypeListBox.DataSource = this.Type;
                 DateListBox.DataSource = this.Date;
@@ -152,39 +189,7 @@ namespace Lab2
                 {
                     this.StatusText.Text = "Error: " + err.Message;
                 }
-
-
-
             }
-        }
-
-        private void About_Click(object sender, EventArgs e)
-        {
-            AboutForm aboutForm = new AboutForm();
-            aboutForm.ShowDialog();
-        }
-
-        private void StatusText_Click(object sender, EventArgs e)
-        {
-
-            if (this.StatusText.Text == "Welcome." || this.StatusText.Text == "Boop!") this.StatusText.Text = "Boop!";
-            else if (this.StatusText.Text != "Copied to clipboard.")
-            {
-                // copy to clipboard
-                Clipboard.SetText(this.StatusText.Text);
-                this.StatusText.Text = "Copied to clipboard.";
-            }
-        }
-
-        private void BatchImport_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-                if (fbd.ShowDialog() == DialogResult.OK)
-                {
-                    string directoryPath = fbd.SelectedPath;
-                    this.StatusText.Text = "Directory selected: " + directoryPath;
-                    this.FileLocationTextBox.Text = directoryPath;   
-                }
         }
     }
 }
