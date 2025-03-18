@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
 using Lab2_WHDIBW;
+using FireLog;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Lab2
 {
@@ -11,7 +13,6 @@ namespace Lab2
     {
         List<string> Type, Date, Time, Source, Destination, Transport;
         private string directoryPath;
-        private int lineCounter;
 
         public Form1()
         {
@@ -88,8 +89,18 @@ namespace Lab2
 
         private void LoadButton_Click(object sender, EventArgs e)
         {
-            ListClearItems();
-            SearchFiles();
+           // ListClearItems();
+          //  SearchFiles();
+
+            string folderPath = this.FileLocationTextBox.Text;
+            if (!Directory.Exists(folderPath))
+            {
+                MessageBox.Show("The specified directory does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            BackgroundWorkerForm backgroundWorkerForm = new BackgroundWorkerForm(folderPath, this);
+            backgroundWorkerForm.ShowDialog();
         }
 
 
@@ -127,6 +138,7 @@ namespace Lab2
         {
             try
             {
+                int lineCounter = 0;
                 const Int32 BufferSize = 512; // sector size on Windows
                 const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
                 using FileStream fs = new FileStream(this.FileLocationTextBox.Text, FileMode.Open, FileAccess.Read);
