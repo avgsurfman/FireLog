@@ -14,6 +14,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using System.Security.Cryptography.Xml;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Lab2
 {
@@ -100,7 +101,7 @@ namespace Lab2
                     this.fullLogBox.Items.Add(line);
                     Array values = line.Split(',');
                     if (values.Length != 6) continue; // might want to implement a csv parser at some point
-                    if (!line.Contains(Ignore)) 
+                    if (!line.Contains(Ignore))
                     {
                         // this.StatusText.Text = "Trying to append" + values.ToString();
                         // TODO : unpack this in a pythonic way
@@ -173,6 +174,17 @@ namespace Lab2
                 Clipboard.SetText(this.StatusText.Text);
                 this.StatusText.Text = "Copied to clipboard.";
             }
+        }
+
+        private void BatchImport_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    string directoryPath = fbd.SelectedPath;
+                    this.StatusText.Text = "Directory selected: " + directoryPath;
+                    this.FileLocationTextBox.Text = directoryPath;   
+                }
         }
     }
 }
