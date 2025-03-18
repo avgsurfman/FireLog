@@ -82,7 +82,7 @@ namespace Lab2
             foreach (string file in files)
             {
                 this.FileLocationTextBox.Text = file;
-                ReadFile();
+        //        ReadFile();
             }
             this.FileLocationTextBox.Text = directoryPath;
         }
@@ -134,17 +134,14 @@ namespace Lab2
         }
 
 
-        void ReadFile()
+        public void ProcessLines (List<string> lineList)
         {
             try
             {
                 int lineCounter = 0;
                 const Int32 BufferSize = 512; // sector size on Windows
                 const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
-                using FileStream fs = new FileStream(this.FileLocationTextBox.Text, FileMode.Open, FileAccess.Read);
-                using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);//,true, BufferSize); //convert encodings later
-                string line;
-                while ((line = sr.ReadLine()) != null)
+                foreach (string line in lineList)
                 {
                     lineCounter++;
                     this.fullLogBox.Items.Add(line);
@@ -171,13 +168,6 @@ namespace Lab2
                 SourceListBox.DataSource = this.Source;
                 DestListBox.DataSource = this.Destination;
                 TransportListBox.DataSource = this.Transport;
-
-                sr.Close();
-                fs.Close();
-
-
-
-
 
             }
             catch (IOException err)

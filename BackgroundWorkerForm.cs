@@ -61,6 +61,7 @@ namespace FireLog
             {
                 DirectoryLines.Items.Add(lineList[i]);
             }
+            parentForm.ProcessLines(lineList);
         }
 
         void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
