@@ -256,8 +256,27 @@ namespace Lab2
                 }
 
 
-
             }
+            catch (System.UnauthorizedAccessException err)
+            {
+                string msg = "The path is either inaccesible,  " +
+                    ", check file permissions and try again." +
+                    "(Are you trying to load a directory? Use Menu -> Batch load) instead";
+                string caption = "Path inaccesible.";
+                MessageBox.Show(msg, caption,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var files = from retrievedFiles in Directory.EnumerateFiles(this.FileLocationTextBox.Text, "*.txt", SearchOption.AllDirectories)
+                            select retrievedFiles;
+            Console.WriteLine("Files:");
+            foreach (string file in files)
+            {
+                Console.WriteLine(file);
+            }   
         }
     }
 }
