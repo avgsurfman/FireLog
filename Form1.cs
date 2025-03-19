@@ -100,7 +100,7 @@ namespace Lab2
                     this.fullLogBox.Items.Add(line);
                     Array values = line.Split(',');
                     if (values.Length != 6) continue; // might want to implement a csv parser at some point
-                    if (!line.Contains(Ignore)) 
+                    if (!line.Contains(Ignore))
                     {
                         // this.StatusText.Text = "Trying to append" + values.ToString();
                         // TODO : unpack this in a pythonic way
@@ -153,7 +153,15 @@ namespace Lab2
                 }
 
 
-
+            }
+            catch (System.UnauthorizedAccessException err)
+            {
+                string msg = "The path is either inaccesible,  " +
+                    ", check file permissions and try again." +
+                    "(Are you trying to load a directory? Use Menu -> Batch load) instead";
+                string caption = "Path inaccesible.";
+                MessageBox.Show(msg, caption,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -173,6 +181,19 @@ namespace Lab2
                 Clipboard.SetText(this.StatusText.Text);
                 this.StatusText.Text = "Copied to clipboard.";
             }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var files = from retrievedFiles in Directory.EnumerateFiles(this.FileLocationTextBox.Text, "*.txt", SearchOption.AllDirectories)
+                            select retrievedFiles;
+            Console.WriteLine("Files:");
+            foreach (string file in files)
+            {
+                Console.WriteLine(file);
+            }   
+
+
         }
     }
 }
