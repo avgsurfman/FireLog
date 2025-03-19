@@ -47,6 +47,7 @@
             label5 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
             button1 = new System.Windows.Forms.Button();
+            button2 = new System.Windows.Forms.Button();
             menuStrip1 = new System.Windows.Forms.MenuStrip();
             fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,8 +59,10 @@
             // TypeListBox
             // 
             TypeListBox.FormattingEnabled = true;
-            TypeListBox.Location = new System.Drawing.Point(24, 514);
-            TypeListBox.Margin = new System.Windows.Forms.Padding(4);
+            TypeListBox.ItemHeight = 15;
+            TypeListBox.Location = new System.Drawing.Point(13, 241);
+            TypeListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+
             TypeListBox.Name = "TypeListBox";
             TypeListBox.Size = new System.Drawing.Size(171, 324);
             TypeListBox.TabIndex = 0;
@@ -78,8 +81,10 @@
             // DateListBox
             // 
             DateListBox.FormattingEnabled = true;
-            DateListBox.Location = new System.Drawing.Point(202, 514);
-            DateListBox.Margin = new System.Windows.Forms.Padding(4);
+            DateListBox.ItemHeight = 15;
+            DateListBox.Location = new System.Drawing.Point(109, 241);
+            DateListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+
             DateListBox.Name = "DateListBox";
             DateListBox.Size = new System.Drawing.Size(171, 324);
             DateListBox.TabIndex = 2;
@@ -87,8 +92,10 @@
             // TimeListBox
             // 
             TimeListBox.FormattingEnabled = true;
-            TimeListBox.Location = new System.Drawing.Point(381, 514);
-            TimeListBox.Margin = new System.Windows.Forms.Padding(4);
+
+            TimeListBox.ItemHeight = 15;
+            TimeListBox.Location = new System.Drawing.Point(205, 241);
+            TimeListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             TimeListBox.Name = "TimeListBox";
             TimeListBox.Size = new System.Drawing.Size(171, 324);
             TimeListBox.TabIndex = 3;
@@ -96,8 +103,9 @@
             // SourceListBox
             // 
             SourceListBox.FormattingEnabled = true;
-            SourceListBox.Location = new System.Drawing.Point(557, 514);
-            SourceListBox.Margin = new System.Windows.Forms.Padding(4);
+            SourceListBox.ItemHeight = 15;
+            SourceListBox.Location = new System.Drawing.Point(300, 241);
+            SourceListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             SourceListBox.Name = "SourceListBox";
             SourceListBox.Size = new System.Drawing.Size(177, 324);
             SourceListBox.TabIndex = 4;
@@ -105,8 +113,11 @@
             // DestListBox
             // 
             DestListBox.FormattingEnabled = true;
-            DestListBox.Location = new System.Drawing.Point(743, 514);
-            DestListBox.Margin = new System.Windows.Forms.Padding(4);
+
+            DestListBox.ItemHeight = 15;
+            DestListBox.Location = new System.Drawing.Point(400, 241);
+            DestListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+
             DestListBox.Name = "DestListBox";
             DestListBox.Size = new System.Drawing.Size(164, 324);
             DestListBox.TabIndex = 5;
@@ -114,18 +125,21 @@
             // TransportListBox
             // 
             TransportListBox.FormattingEnabled = true;
-            TransportListBox.Location = new System.Drawing.Point(914, 514);
-            TransportListBox.Margin = new System.Windows.Forms.Padding(4);
+            TransportListBox.ItemHeight = 15;
+            TransportListBox.Location = new System.Drawing.Point(492, 241);
+            TransportListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+
             TransportListBox.Name = "TransportListBox";
             TransportListBox.Size = new System.Drawing.Size(184, 324);
             TransportListBox.TabIndex = 6;
             // 
             // buttonOpenFile
             // 
-            buttonOpenFile.Location = new System.Drawing.Point(743, 38);
-            buttonOpenFile.Margin = new System.Windows.Forms.Padding(4);
+            buttonOpenFile.Location = new System.Drawing.Point(389, 21);
+            buttonOpenFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             buttonOpenFile.Name = "buttonOpenFile";
-            buttonOpenFile.Size = new System.Drawing.Size(163, 79);
+            buttonOpenFile.Size = new System.Drawing.Size(66, 34);
+
             buttonOpenFile.TabIndex = 7;
             buttonOpenFile.Text = "Open File";
             buttonOpenFile.UseVisualStyleBackColor = true;
@@ -139,16 +153,19 @@
             // fullLogBox
             // 
             fullLogBox.FormattingEnabled = true;
-            fullLogBox.Location = new System.Drawing.Point(24, 145);
-            fullLogBox.Margin = new System.Windows.Forms.Padding(4);
+
+            fullLogBox.ItemHeight = 15;
+            fullLogBox.Location = new System.Drawing.Point(13, 68);
+            fullLogBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             fullLogBox.Name = "fullLogBox";
             fullLogBox.Size = new System.Drawing.Size(1074, 292);
             fullLogBox.TabIndex = 8;
             // 
             // LoadButton
             // 
-            LoadButton.Location = new System.Drawing.Point(24, 38);
-            LoadButton.Margin = new System.Windows.Forms.Padding(4);
+
+            LoadButton.Location = new System.Drawing.Point(13, 18);
+            LoadButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             LoadButton.Name = "LoadButton";
             LoadButton.Size = new System.Drawing.Size(145, 79);
             LoadButton.TabIndex = 9;
@@ -158,8 +175,9 @@
             // 
             // FileLocationTextBox
             // 
-            FileLocationTextBox.Location = new System.Drawing.Point(202, 58);
-            FileLocationTextBox.Margin = new System.Windows.Forms.Padding(4);
+
+            FileLocationTextBox.Location = new System.Drawing.Point(109, 27);
+            FileLocationTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             FileLocationTextBox.Name = "FileLocationTextBox";
             FileLocationTextBox.Size = new System.Drawing.Size(500, 39);
             FileLocationTextBox.TabIndex = 10;
@@ -226,15 +244,27 @@
             // 
             // button1
             // 
-            button1.Location = new System.Drawing.Point(938, 38);
-            button1.Margin = new System.Windows.Forms.Padding(4);
+
+            button1.Location = new System.Drawing.Point(533, 21);
+            button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             button1.Name = "button1";
-            button1.Size = new System.Drawing.Size(163, 79);
+            button1.Size = new System.Drawing.Size(70, 34);
             button1.TabIndex = 17;
             button1.Text = "About";
             button1.UseVisualStyleBackColor = true;
             button1.Click += About_Click;
             // 
+
+            // button2
+            // 
+            button2.Location = new System.Drawing.Point(459, 21);
+            button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            button2.Name = "button2";
+            button2.Size = new System.Drawing.Size(70, 34);
+            button2.TabIndex = 18;
+            button2.Text = "Batch Import";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += BatchImport_Click;
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
@@ -276,7 +306,10 @@
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1148, 932);
+
+            ClientSize = new System.Drawing.Size(609, 437);
+            Controls.Add(button2);
+
             Controls.Add(button1);
             Controls.Add(label6);
             Controls.Add(label5);
@@ -295,9 +328,11 @@
             Controls.Add(DateListBox);
             Controls.Add(StatusText);
             Controls.Add(TypeListBox);
+
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
-            Margin = new System.Windows.Forms.Padding(4);
+            Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+
             Name = "Form1";
             Text = "Form1";
             menuStrip1.ResumeLayout(false);
@@ -327,6 +362,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;

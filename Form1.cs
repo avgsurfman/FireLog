@@ -1,25 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Lab2_WHDIBW;
-using static System.Windows.Forms.LinkLabel;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
-using System.Security.Cryptography.Xml;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using FireLog;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Lab2
 {
     public partial class Form1 : Form
     {
         List<string> Type, Date, Time, Source, Destination, Transport;
+        private string directoryPath;
 
         public Form1()
         {
@@ -85,7 +78,117 @@ namespace Lab2
         private void LoadButton_Click(object sender, EventArgs e)
         {
             ListClearItems();
+            if (this.FileLocationTextBox.Text.EndsWith(".txt"))
+            {
+                ReadFile(this.FileLocationTextBox.Text);
+            }
 
+            else 
+            { 
+                string folderPath = this.FileLocationTextBox.Text;
+                if (!Directory.Exists(folderPath))
+                {
+                    MessageBox.Show("The specified directory does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                BackgroundWorkerForm backgroundWorkerForm = new BackgroundWorkerForm(folderPath, this);
+                backgroundWorkerForm.ShowDialog();
+            }
+        }
+
+
+        private void About_Click(object sender, EventArgs e)
+        {
+            AboutForm aboutForm = new AboutForm();
+            aboutForm.ShowDialog();
+        }
+
+        private void StatusText_Click(object sender, EventArgs e)
+        {
+
+            if (this.StatusText.Text == "Welcome." || this.StatusText.Text == "Boop!") this.StatusText.Text = "Boop!";
+            else if (this.StatusText.Text != "Copied to clipboard.")
+            {
+                // copy to clipboard
+                Clipboard.SetText(this.StatusText.Text);
+                this.StatusText.Text = "Copied to clipboard.";
+            }
+        }
+
+        private void BatchImport_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                directoryPath = fbd.SelectedPath;
+                this.StatusText.Text = "Directory selected: " + directoryPath;
+                this.FileLocationTextBox.Text = directoryPath;
+            }
+        }
+
+
+        public void ProcessLines (List<string> lineList)
+        {
+            try
+            {
+                int lineCounter = 0;
+                const Int32 BufferSize = 512; // sector size on Windows
+                const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
+                foreach (string line in lineList)
+                {
+                    lineCounter++;
+                    this.fullLogBox.Items.Add(line);
+                    Array values = line.Split(',');
+                    if (values.Length != 6) continue; // might want to implement a csv parser at some point
+                    if (!line.Contains(Ignore))
+                    {
+                        // this.StatusText.Text = "Trying to append" + values.ToString();
+                        // TODO : unpack this in a pythonic way
+                        this.Type.Add(values.GetValue(0).ToString());
+                        this.Date.Add(values.GetValue(1).ToString());
+                        this.Time.Add(values.GetValue(2).ToString());
+                        this.Source.Add(values.GetValue(3).ToString());
+                        this.Destination.Add(values.GetValue(4).ToString());
+                        this.Transport.Add(values.GetValue(5).ToString());
+                    }
+                }
+
+                this.StatusText.Text = $"Loaded {lineCounter} lines of data from the files.";
+                //rebind listboxes
+                TypeListBox.DataSource = this.Type;
+                DateListBox.DataSource = this.Date;
+                TimeListBox.DataSource = this.Time;
+                SourceListBox.DataSource = this.Source;
+                DestListBox.DataSource = this.Destination;
+                TransportListBox.DataSource = this.Transport;
+
+            }
+            catch (IOException err)
+            {
+                this.StatusText.Text = string.Format("Error: {err}", err.Message);
+            }
+
+            catch (ArgumentException err)
+            {
+
+                // show messagebox
+                if (err.Message == "The value cannot be an empty string. (Parameter 'path')")
+                {
+                    string msg = "Valid path cannot be empty, please select a file first.";
+                    string caption = "Invalid Path";
+                    MessageBox.Show(msg, caption,
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //https://stackoverflow.com/questions/2109441/how-to-show-a-custom-error-or-warning-message-box-in-net-winforms
+                }
+                else
+                {
+                    this.StatusText.Text = "Error: " + err.Message;
+                }
+            }
+        }
+
+        private void ReadFile(string name)
+        {
             try
             {
                 int lineCounter = 0;
@@ -165,24 +268,6 @@ namespace Lab2
             }
         }
 
-        private void About_Click(object sender, EventArgs e)
-        {
-            AboutForm aboutForm = new AboutForm();
-            aboutForm.ShowDialog();
-        }
-
-        private void StatusText_Click(object sender, EventArgs e)
-        {
-
-            if (this.StatusText.Text == "Welcome." || this.StatusText.Text == "Boop!") this.StatusText.Text = "Boop!";
-            else if (this.StatusText.Text != "Copied to clipboard.")
-            {
-                // copy to clipboard
-                Clipboard.SetText(this.StatusText.Text);
-                this.StatusText.Text = "Copied to clipboard.";
-            }
-        }
-
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             var files = from retrievedFiles in Directory.EnumerateFiles(this.FileLocationTextBox.Text, "*.txt", SearchOption.AllDirectories)
@@ -192,8 +277,6 @@ namespace Lab2
             {
                 Console.WriteLine(file);
             }   
-
-
         }
     }
 }
