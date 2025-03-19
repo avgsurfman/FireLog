@@ -75,32 +75,25 @@ namespace Lab2
 
         }
 
-        void SearchFiles()
-        {
-            string searchPattern = "*.txt";
-            string[] files = Directory.GetFiles(directoryPath, searchPattern);
-            foreach (string file in files)
-            {
-                this.FileLocationTextBox.Text = file;
-        //        ReadFile();
-            }
-            this.FileLocationTextBox.Text = directoryPath;
-        }
-
         private void LoadButton_Click(object sender, EventArgs e)
         {
-           // ListClearItems();
-          //  SearchFiles();
-
-            string folderPath = this.FileLocationTextBox.Text;
-            if (!Directory.Exists(folderPath))
+            ListClearItems();
+            if (this.FileLocationTextBox.Text.EndsWith(".txt"))
             {
-                MessageBox.Show("The specified directory does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                ReadFile(this.FileLocationTextBox.Text);
             }
 
-            BackgroundWorkerForm backgroundWorkerForm = new BackgroundWorkerForm(folderPath, this);
-            backgroundWorkerForm.ShowDialog();
+            else 
+            { 
+                string folderPath = this.FileLocationTextBox.Text;
+                if (!Directory.Exists(folderPath))
+                {
+                    MessageBox.Show("The specified directory does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                BackgroundWorkerForm backgroundWorkerForm = new BackgroundWorkerForm(folderPath, this);
+                backgroundWorkerForm.ShowDialog();
+            }
         }
 
 
@@ -191,6 +184,79 @@ namespace Lab2
                 {
                     this.StatusText.Text = "Error: " + err.Message;
                 }
+            }
+        }
+
+        private void ReadFile(string name)
+        {
+            try
+            {
+                int lineCounter = 0;
+                const Int32 BufferSize = 512; // sector size on Windows
+                const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
+                using FileStream fs = new FileStream(this.FileLocationTextBox.Text, FileMode.Open, FileAccess.Read);
+                using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);//,true, BufferSize); //convert encodings later
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    lineCounter++;
+                    this.fullLogBox.Items.Add(line);
+                    Array values = line.Split(',');
+                    if (values.Length != 6) continue; // might want to implement a csv parser at some point
+                    if (!line.Contains(Ignore))
+                    {
+                        // this.StatusText.Text = "Trying to append" + values.ToString();
+                        // TODO : unpack this in a pythonic way
+                        this.Type.Add(values.GetValue(0).ToString());
+                        this.Date.Add(values.GetValue(1).ToString());
+                        this.Time.Add(values.GetValue(2).ToString());
+                        this.Source.Add(values.GetValue(3).ToString());
+                        this.Destination.Add(values.GetValue(4).ToString());
+                        this.Transport.Add(values.GetValue(5).ToString());
+                    }
+                }
+
+                this.StatusText.Text = $"Loaded {lineCounter} lines of data from the file.";
+                //rebind listboxes
+                TypeListBox.DataSource = this.Type;
+                DateListBox.DataSource = this.Date;
+                TimeListBox.DataSource = this.Time;
+                SourceListBox.DataSource = this.Source;
+                DestListBox.DataSource = this.Destination;
+                TransportListBox.DataSource = this.Transport;
+
+                sr.Close();
+                fs.Close();
+
+
+
+
+
+            }
+            catch (IOException err)
+            {
+                this.StatusText.Text = string.Format("Error: {err}", err.Message);
+            }
+
+            catch (ArgumentException err)
+            {
+
+                // show messagebox
+                if (err.Message == "The value cannot be an empty string. (Parameter 'path')")
+                {
+                    string msg = "Valid path cannot be empty, please select a file first.";
+                    string caption = "Invalid Path";
+                    MessageBox.Show(msg, caption,
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //https://stackoverflow.com/questions/2109441/how-to-show-a-custom-error-or-warning-message-box-in-net-winforms
+                }
+                else
+                {
+                    this.StatusText.Text = "Error: " + err.Message;
+                }
+
+
+
             }
         }
     }
