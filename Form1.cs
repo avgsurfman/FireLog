@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
+using System.Linq;
 using Lab2_WHDIBW;
 using FireLog;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -11,18 +12,20 @@ namespace Lab2
 {
     public partial class Form1 : Form
     {
-        List<string> Type, Date, Time, Source, Destination, Transport;
+        public List<string> Logbox, Type, Date, Time, Source, Destination, Transport;
         private string directoryPath;
 
         public Form1()
         {
             InitializeComponent();
+            this.Logbox = new List<string>();
             this.Type = new List<string>();
             this.Date = new List<string>();
             this.Time = new List<string>();
             this.Source = new List<string>();
             this.Destination = new List<string>();
             this.Transport = new List<string>();
+            
 
             this.StatusText.Text = "Welcome.";
 
@@ -31,17 +34,18 @@ namespace Lab2
         // clear items
 
         public void ListClearItems()
-        {
+        {   // change this to BindingList
             Console.WriteLine("Clearing items...");
-            this.fullLogBox.Items.Clear();
+            this.Logbox.Clear();
             this.Type.Clear();
             this.Date.Clear();
             this.Time.Clear();
             this.Source.Clear();
             this.Destination.Clear();
             this.Transport.Clear();
-
+            fullLogBox.DataSource = null;
             TypeListBox.DataSource = null;
+            
             DateListBox.DataSource = null;
             TimeListBox.DataSource = null;
             SourceListBox.DataSource = null;
@@ -83,25 +87,41 @@ namespace Lab2
                 ReadFile(this.FileLocationTextBox.Text);
             }
 
-            else 
-            { 
+            else
+            {
                 string folderPath = this.FileLocationTextBox.Text;
                 if (!Directory.Exists(folderPath))
                 {
-                    MessageBox.Show("The specified directory does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("The specified path does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 BackgroundWorkerForm backgroundWorkerForm = new BackgroundWorkerForm(folderPath, this);
+
                 backgroundWorkerForm.ShowDialog();
+
+                //reset bindings
+                fullLogBox.DataSource = null;
+                TypeListBox.DataSource = null;
+                DateListBox.DataSource = null;
+                TimeListBox.DataSource = null;
+                SourceListBox.DataSource = null;
+                DestListBox.DataSource = null;
+                TransportListBox.DataSource = null;
+
+                fullLogBox.DataSource = this.Type;
+                TypeListBox.DataSource = this.Type;
+                DateListBox.DataSource = this.Date;
+                TimeListBox.DataSource = this.Time;
+                SourceListBox.DataSource = this.Source;
+                DestListBox.DataSource = this.Destination;
+                TransportListBox.DataSource = this.Transport;
+
+                this.StatusText.Text += "\n" + this.DateListBox.Items.Count + "Have been added.";
+
             }
         }
 
 
-        private void About_Click(object sender, EventArgs e)
-        {
-            AboutForm aboutForm = new AboutForm();
-            aboutForm.ShowDialog();
-        }
 
         private void StatusText_Click(object sender, EventArgs e)
         {
@@ -127,72 +147,14 @@ namespace Lab2
         }
 
 
-        public void ProcessLines (List<string> lineList)
-        {
-            try
-            {
-                int lineCounter = 0;
-                const Int32 BufferSize = 512; // sector size on Windows
-                const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
-                foreach (string line in lineList)
-                {
-                    lineCounter++;
-                    this.fullLogBox.Items.Add(line);
-                    Array values = line.Split(',');
-                    if (values.Length != 6) continue; // might want to implement a csv parser at some point
-                    if (!line.Contains(Ignore))
-                    {
-                        // this.StatusText.Text = "Trying to append" + values.ToString();
-                        // TODO : unpack this in a pythonic way
-                        this.Type.Add(values.GetValue(0).ToString());
-                        this.Date.Add(values.GetValue(1).ToString());
-                        this.Time.Add(values.GetValue(2).ToString());
-                        this.Source.Add(values.GetValue(3).ToString());
-                        this.Destination.Add(values.GetValue(4).ToString());
-                        this.Transport.Add(values.GetValue(5).ToString());
-                    }
-                }
-
-                this.StatusText.Text = $"Loaded {lineCounter} lines of data from the files.";
-                //rebind listboxes
-                TypeListBox.DataSource = this.Type;
-                DateListBox.DataSource = this.Date;
-                TimeListBox.DataSource = this.Time;
-                SourceListBox.DataSource = this.Source;
-                DestListBox.DataSource = this.Destination;
-                TransportListBox.DataSource = this.Transport;
-
-            }
-            catch (IOException err)
-            {
-                this.StatusText.Text = string.Format("Error: {err}", err.Message);
-            }
-
-            catch (ArgumentException err)
-            {
-
-                // show messagebox
-                if (err.Message == "The value cannot be an empty string. (Parameter 'path')")
-                {
-                    string msg = "Valid path cannot be empty, please select a file first.";
-                    string caption = "Invalid Path";
-                    MessageBox.Show(msg, caption,
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //https://stackoverflow.com/questions/2109441/how-to-show-a-custom-error-or-warning-message-box-in-net-winforms
-                }
-                else
-                {
-                    this.StatusText.Text = "Error: " + err.Message;
-                }
-            }
-        }
+       
 
         private void ReadFile(string name)
         {
             try
             {
                 int lineCounter = 0;
-                const Int32 BufferSize = 512; // sector size on Windows
+                const Int32 BufferSize = 512; //512 sector size on Windows
                 const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
                 using FileStream fs = new FileStream(this.FileLocationTextBox.Text, FileMode.Open, FileAccess.Read);
                 using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);//,true, BufferSize); //convert encodings later
@@ -271,12 +233,18 @@ namespace Lab2
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             var files = from retrievedFiles in Directory.EnumerateFiles(this.FileLocationTextBox.Text, "*.txt", SearchOption.AllDirectories)
-                            select retrievedFiles;
+                        select retrievedFiles;
             Console.WriteLine("Files:");
             foreach (string file in files)
             {
                 Console.WriteLine(file);
-            }   
+            }
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            AboutForm aboutForm = new AboutForm();
+            aboutForm.ShowDialog();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -17,32 +18,74 @@ namespace FireLog
 
     public partial class BackgroundWorkerForm : Form
     {
+        public List<string> lineList = new List<string>();
+        public BindingList<string> ListWrapper;
+        public BindingList<string> TypeWrapper, DateWrapper, TimeWrapper, SourceWrapper, DestWrapper, TransportWrapper;
         private BackgroundWorker bw;
-        private List<string> lineList = new List<string>();
         private string folderPath;
         private Form1 parentForm;
+        int lineCounter = 0;
+        int correctLinecounter = 0;
 
         public BackgroundWorkerForm(string folderPath, Form1 parent)
         {
-            InitializeComponent();
+            InitializeComponent();  
             this.folderPath = folderPath;
             this.parentForm = parent;
-            lineList = new List<string>();
-            bw = new BackgroundWorker();
+            this.Load += BackgroundWorkerForm_load;
         }
 
-        private void Start_Click(object sender, EventArgs e)
+        public void BackgroundWorkerForm_load(object sender, EventArgs e) {
+            InitializeBindingList();
+            InitializeBackgroundWorker();
+        }
+
+
+        // Set up the BackgroundWorker object by 
+        // attaching event handlers. 
+        private void InitializeBackgroundWorker()
         {
-            progressBar1.Value = 0;
-            progressBar1.Maximum = 100;
             bw = new BackgroundWorker();
             bw.WorkerReportsProgress = true;
             bw.WorkerSupportsCancellation = true;
             bw.DoWork += new DoWorkEventHandler(bw_DoWork);
             bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
-            bw.RunWorkerAsync();
+        }
+
+
+        private void InitializeBindingList() 
+        {
+            ListWrapper = new BindingList<string>(parentForm.Logbox); 
+            TypeWrapper = new BindingList<string>(parentForm.Type);
+            DateWrapper = new BindingList<string>(parentForm.Date);
+            TimeWrapper = new BindingList<string>(parentForm.Time);
+            SourceWrapper = new BindingList<string>(parentForm.Source);
+            DestWrapper = new BindingList<string>(parentForm.Destination);
+            TransportWrapper = new BindingList<string>(parentForm.Transport);
+
+            
+            ListWrapper.RaiseListChangedEvents = true;
+            DateWrapper.RaiseListChangedEvents = true;
+            TimeWrapper.RaiseListChangedEvents = true;
+            SourceWrapper.RaiseListChangedEvents = true;
+            DestWrapper.RaiseListChangedEvents = true;
+            TransportWrapper.RaiseListChangedEvents = true;
+            ListWrapper.RaiseListChangedEvents = true;
+
+            // Don't allow parts to be edited.
+            ListWrapper.AllowEdit = false;
+            //ListWrapper.Add("Does this work?");
+            
+        }
+
+        private void Start_Click(object sender, EventArgs e)
+        {
+            progressBar1.Value = 0;
+            progressBar1.Maximum = 100;
             Start.Enabled = false;
+            bw.RunWorkerAsync();
+            
         }
 
         private void Cancel_Click(object sender, EventArgs e)
@@ -57,24 +100,37 @@ namespace FireLog
                 MessageBox.Show("The operation failed");
                 return;
             }
-            for (int i = 0; i < lineList.Count; i++)
-            {
-                DirectoryLines.Items.Add(lineList[i]);
+            else { 
+                labelSneed.Text = string.Format("Read {0} lines, {1} of which are correct.", lineCounter, correctLinecounter);
+                // reset bindings
+
             }
-            parentForm.ProcessLines(lineList);
+            //for (int i = 0; i < lineList.Count; i++)
+            //{
+            //    DirectoryLines.Items.Add(lineList[i]);
+            //}
+            //parentForm.ProcessLines(ref lineList);
         }
 
         void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             int proc = e.ProgressPercentage;
             progressBar1.Value = proc;
+
         }
+
+        // this runs on a separate Thread
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             string[] files = Directory.GetFiles(folderPath, "*.txt");
-            if (files.Length == 0)
+            if (files.Length == 0) // hey copilot, can i just do if !files instead
+                // no, you should check if the length is 0
+                // why though? that's the cpp way
+                // because this is c#
+                // thanks
+
             {
-                MessageBox.Show("There is no files in directory", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("There are no files in the specified directory", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -83,30 +139,74 @@ namespace FireLog
                 if (bw.CancellationPending)
                 {
                     e.Cancel = true;
-                    return;
+                    break;
+                }
+                else
+                {
+                    ProcessLines(files[i]);
+                    bw.ReportProgress((i + 1) * 100 / files.Length);
                 }
 
-                ReadFileLines(files[i]);
-                bw.ReportProgress((i + 1) * 100 / files.Length);
             }
         }
 
-        private void ReadFileLines(string name)
+        public void ProcessLines(string filename)
         {
+            //TODO: Figure out C# logging
+            //Debug.WriteLine($"Adding file {filename}");
+            //DirectoryLines.Items.Add($"Adding file {filename}...");
             try
             {
-                using (StreamReader sr = new StreamReader(name))
+                const Int32 BufferSize = 512; // sector size on Windows
+                const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
+
+                using FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8, true, BufferSize); //convert encodings later
+                string line;
+    
+                while ((line = sr.ReadLine()) != null)
                 {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
+                    lineCounter++;
+                    //Debug.WriteLine(line);
+                    ListWrapper.Add(line);
+                    Array values = line.Split(',');
+                    if (values.Length != 6) continue; // might want to implement a csv parser at some point
+                    if (!line.Contains(Ignore))
                     {
-                        lineList.Add(line);
+                        correctLinecounter++;
+                        // TODO : unpack this in a pythonic way
+                        this.TypeWrapper.Add(values.GetValue(0).ToString());
+                        this.DateWrapper.Add(values.GetValue(1).ToString());
+                        this.TimeWrapper.Add(values.GetValue(2).ToString());
+                        this.SourceWrapper.Add(values.GetValue(3).ToString());
+                        this.DestWrapper.Add(values.GetValue(4).ToString());
+                        this.TransportWrapper.Add(values.GetValue(5).ToString());
                     }
                 }
+
             }
+            catch (IOException err)
+            {
+                this.labelSneed.Text = string.Format("Error: {err}", err.Message);
+            }
+        }
+
+
+
+        private void ReadFileLines(string filename)
+        {
+            try {
+                Debug.WriteLine($"Appending {filename}...");
+                var lines = File.ReadAllLines(filename);
+
+                //lineList.AddRange(lines);
+                // update the interface, too
+                //ListWrapper.ResetBindings();
+            }
+
             catch (Exception ex)
             {
-                MessageBox.Show($"File reading error {name}:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"File reading error {filename}:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
