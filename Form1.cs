@@ -108,7 +108,7 @@ namespace Lab2
                 DestListBox.DataSource = null;
                 TransportListBox.DataSource = null;
 
-                fullLogBox.DataSource = this.Type;
+                fullLogBox.DataSource = this.Logbox;
                 TypeListBox.DataSource = this.Type;
                 DateListBox.DataSource = this.Date;
                 TimeListBox.DataSource = this.Time;

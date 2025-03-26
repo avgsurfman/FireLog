@@ -18,7 +18,6 @@ namespace FireLog
 
     public partial class BackgroundWorkerForm : Form
     {
-        public List<string> lineList = new List<string>();
         public BindingList<string> ListWrapper;
         public BindingList<string> TypeWrapper, DateWrapper, TimeWrapper, SourceWrapper, DestWrapper, TransportWrapper;
         private BackgroundWorker bw;
@@ -161,16 +160,21 @@ namespace FireLog
                 const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
 
                 using FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
-                using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8, true, BufferSize); //convert encodings later
+                using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8, true, BufferSize); //convert encodings later?
                 string line;
-    
+                DirectoryLines.BeginInvoke(new UIUpdateDelegate(UIDelegateMethod), this.DirectoryLines, filename);
                 while ((line = sr.ReadLine()) != null)
                 {
                     lineCounter++;
                     //Debug.WriteLine(line);
+
+
+                    /* Invokes the delegate as it's not possible (or good practise) to modify 
+                    the UI from our thread */
+
                     ListWrapper.Add(line);
                     Array values = line.Split(',');
-                    if (values.Length != 6) continue; // might want to implement a csv parser at some point
+                    if (values.Length != 6) continue; // will do
                     if (!line.Contains(Ignore))
                     {
                         correctLinecounter++;
@@ -209,5 +213,16 @@ namespace FireLog
                 MessageBox.Show($"File reading error {filename}:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        /* Delegate method responsible for handing UI asynchronously. */
+        public delegate void UIUpdateDelegate(ListBox lb, string filename);
+
+        public void UIDelegateMethod(ListBox lb, string filename)
+        {
+            lb.Items.Add($"Reading {filename}");
+
+        }
     }
+
 }
