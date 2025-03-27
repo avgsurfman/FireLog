@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 using Lab2;
 
 namespace FireLog
@@ -25,6 +26,7 @@ namespace FireLog
         private Form1 parentForm;
         int lineCounter = 0;
         int correctLinecounter = 0;
+        SqlConnection connection;
 
         public BackgroundWorkerForm(string folderPath, Form1 parent)
         {
@@ -154,6 +156,7 @@ namespace FireLog
             //TODO: Figure out C# logging
             //Debug.WriteLine($"Adding file {filename}");
             //DirectoryLines.Items.Add($"Adding file {filename}...");
+            OpenConnection();
             try
             {
                 const Int32 BufferSize = 512; // sector size on Windows
@@ -165,9 +168,9 @@ namespace FireLog
                 DirectoryLines.BeginInvoke(new UIUpdateDelegate(UIDelegateMethod), this.DirectoryLines, filename);
                 while ((line = sr.ReadLine()) != null)
                 {
+                    
                     lineCounter++;
                     //Debug.WriteLine(line);
-
 
                     /* Invokes the delegate as it's not possible (or good practise) to modify 
                     the UI from our thread */
@@ -185,6 +188,7 @@ namespace FireLog
                         this.SourceWrapper.Add(values.GetValue(3).ToString());
                         this.DestWrapper.Add(values.GetValue(4).ToString());
                         this.TransportWrapper.Add(values.GetValue(5).ToString());
+                        saveToDatabase(values.GetValue(0).ToString(), values.GetValue(1).ToString(), values.GetValue(2).ToString(), values.GetValue(3).ToString(), values.GetValue(4).ToString(), values.GetValue(5).ToString());
                     }
                 }
 
@@ -192,6 +196,10 @@ namespace FireLog
             catch (IOException err)
             {
                 this.labelSneed.Text = string.Format("Error: {err}", err.Message);
+            }
+            finally
+            {
+                connection.Close();
             }
         }
 
@@ -222,6 +230,34 @@ namespace FireLog
         {
             lb.Items.Add($"Reading {filename}");
 
+        }
+
+        private void saveToDatabase(String type, String date, String time, String source, String destination, String protocol)
+        {
+            string commandText1 = "DELETE FROM ZoneAlarmLog;";
+            string commandText2 = "INSERT INTO ZoneAlarmLog(Zdarzenie, Data, Czas, Source, Destination, Transport) VALUES ('" +
+                 type + "','" + date + "','" + time + "','" + source + "','" + destination + "','" + protocol + "');";
+            SqlTransaction transaction = connection.BeginTransaction();
+            SqlCommand command1 = new SqlCommand(commandText1, connection, transaction);
+            SqlCommand command2 = new SqlCommand(commandText2, connection, transaction);
+            try
+            {
+                command1.ExecuteNonQuery();
+                command2.ExecuteNonQuery();
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                MessageBox.Show($"Saving to database error: \n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void OpenConnection()
+        {
+            String connectionString = "Data Source=(local);Initial Catalog=HurtowniaLab;Integrated Security=True";
+            connection = new SqlConnection(connectionString);
+            connection.Open();
         }
     }
 
