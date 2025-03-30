@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using Lab2;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace FireLog
 {
@@ -123,6 +125,8 @@ namespace FireLog
         // this runs on a separate Thread
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
+            OpenConnection();
+            deleteFromDatabase();
             string[] files = Directory.GetFiles(folderPath, "*.txt");
             if (files.Length == 0) // hey copilot, can i just do if !files instead
                 // no, you should check if the length is 0
@@ -153,53 +157,71 @@ namespace FireLog
 
         public void ProcessLines(string filename)
         {
-            //TODO: Figure out C# logging
-            //Debug.WriteLine($"Adding file {filename}");
-            //DirectoryLines.Items.Add($"Adding file {filename}...");
-            OpenConnection();
             try
             {
-                const Int32 BufferSize = 512; // sector size on Windows
-                const string Ignore = "type,date,time"; //TODO: IMPLEMENT A PROPER CSV PARSER
+                const int BufferSize = 512; // sector size on Windows
+                const string Ignore = "type,date,time"; // TODO: IMPLEMENT A PROPER CSV PARSER
 
                 using FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
-                using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8, true, BufferSize); //convert encodings later?
+                using StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8, true, BufferSize);
                 string line;
                 DirectoryLines.BeginInvoke(new UIUpdateDelegate(UIDelegateMethod), this.DirectoryLines, filename);
+
                 while ((line = sr.ReadLine()) != null)
                 {
-                    
                     lineCounter++;
-                    //Debug.WriteLine(line);
-
-                    /* Invokes the delegate as it's not possible (or good practise) to modify 
-                    the UI from our thread */
 
                     ListWrapper.Add(line);
-                    Array values = line.Split(',');
-                    if (values.Length != 6) continue; // will do
+                    string[] values = line.Split(',');
+
+                    if (values.Length != 6) continue; // Skip invalid lines
                     if (!line.Contains(Ignore))
                     {
                         correctLinecounter++;
-                        // TODO : unpack this in a pythonic way
-                        this.TypeWrapper.Add(values.GetValue(0).ToString());
-                        this.DateWrapper.Add(values.GetValue(1).ToString());
-                        this.TimeWrapper.Add(values.GetValue(2).ToString());
-                        this.SourceWrapper.Add(values.GetValue(3).ToString());
-                        this.DestWrapper.Add(values.GetValue(4).ToString());
-                        this.TransportWrapper.Add(values.GetValue(5).ToString());
-                        saveToDatabase(values.GetValue(0).ToString(), values.GetValue(1).ToString(), values.GetValue(2).ToString(), values.GetValue(3).ToString(), values.GetValue(4).ToString(), values.GetValue(5).ToString());
+
+                        string type = values[0].Trim();
+                        string dateString = values[1].Trim();
+                        string timeString = values[2].Trim();
+                        string source = values[3].Trim();
+                        string destination = values[4].Trim();
+                        string protocol = values[5].Trim();
+
+                        string timeStringTrim = Regex.Match(timeString, @"^\d{2}:\d{2}:\d{2}").Value; // Pobiera tylko `HH:mm:ss`
+
+                        string dateTimeStr = $"{dateString} {timeStringTrim}";
+
+                        string[] formats = { "yyyy-MM-dd HH:mm:ss", "yyyy/MM/dd HH:mm:ss" };
+
+                        if (DateTime.TryParseExact(dateTimeStr, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+                        {
+                            string formattedDateTime = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+                            this.TypeWrapper.Add(type);
+                            this.DateWrapper.Add(dateString);
+                            this.TimeWrapper.Add(timeString);
+                            this.SourceWrapper.Add(source);
+                            this.DestWrapper.Add(destination);
+                            this.TransportWrapper.Add(protocol);
+
+                            saveToDatabase(type, formattedDateTime, source, destination, protocol);
+                        }
+                        else
+                        {
+                            Debug.WriteLine($"Invalid date format: {dateTimeStr}");
+                        }
                     }
                 }
-
             }
             catch (IOException err)
             {
-                this.labelSneed.Text = string.Format("Error: {err}", err.Message);
+                this.labelSneed.Text = $"Error: {err.Message}";
             }
             finally
             {
-                connection.Close();
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
 
@@ -232,26 +254,98 @@ namespace FireLog
 
         }
 
-        private void saveToDatabase(String type, String date, String time, String source, String destination, String protocol)
+        private void saveToDatabase(string type, string dateTime, string source, string destination, string protocol)
         {
-            string commandText1 = "DELETE FROM ZoneAlarmLog;";
-            string commandText2 = "INSERT INTO ZoneAlarmLog(Zdarzenie, Data, Czas, Source, Destination, Transport) VALUES ('" +
-                 type + "','" + date + "','" + time + "','" + source + "','" + destination + "','" + protocol + "');";
-            SqlTransaction transaction = connection.BeginTransaction();
-            SqlCommand command1 = new SqlCommand(commandText1, connection, transaction);
-            SqlCommand command2 = new SqlCommand(commandText2, connection, transaction);
+            string commandText = "INSERT INTO ZoneAlarmLog (Zdarzenie, DataCzas, Source, Destination, Transport) " +
+                                 "VALUES (@type, @dateTime, @source, @destination, @protocol);";
+
             try
             {
-                command1.ExecuteNonQuery();
-                command2.ExecuteNonQuery();
-                transaction.Commit();
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();  
+                }
+
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        using (SqlCommand command = new SqlCommand(commandText, connection, transaction))
+                        {
+                            command.Parameters.AddWithValue("@type", type);
+                            command.Parameters.AddWithValue("@dateTime", dateTime);  // Nie formatujemy, SQL Server obsłuży string
+                            command.Parameters.AddWithValue("@source", source);
+                            command.Parameters.AddWithValue("@destination", destination);
+                            command.Parameters.AddWithValue("@protocol", protocol);
+
+                            command.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit(); 
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback(); 
+                        MessageBox.Show($"Saving to database error: \n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                transaction.Rollback();
-                MessageBox.Show($"Saving to database error: \n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Database connection error: \n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close(); 
+                }
             }
         }
+
+        private void deleteFromDatabase()
+        {
+            string commandText = "DELETE FROM ZoneAlarmLog;";
+
+            try
+            {
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open(); 
+                }
+
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        using (SqlCommand command = new SqlCommand(commandText, connection, transaction))
+                        {
+                            command.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();  
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"Deleting from database error: \n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database connection error: \n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close(); 
+                }
+            }
+        }
+
+
 
         void OpenConnection()
         {
