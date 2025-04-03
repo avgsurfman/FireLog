@@ -116,7 +116,7 @@ namespace Lab2
                 DestListBox.DataSource = this.Destination;
                 TransportListBox.DataSource = this.Transport;
 
-                this.StatusText.Text += "\n" + this.DateListBox.Items.Count + "Have been added.";
+                this.StatusText.Text += "\n" + this.DateListBox.Items.Count + " have been added.";
 
             }
         }
