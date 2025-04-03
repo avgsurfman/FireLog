@@ -125,6 +125,7 @@ namespace FireLog
         // this runs on a separate Thread
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
+            Console.Write("doing work again...");
             OpenConnection();
             deleteFromDatabase();
             string[] files = Directory.GetFiles(folderPath, "*.txt");
@@ -179,6 +180,7 @@ namespace FireLog
                     {
                         correctLinecounter++;
 
+                        
                         string type = values[0].Trim();
                         string dateString = values[1].Trim();
                         string timeString = values[2].Trim();
@@ -294,13 +296,13 @@ namespace FireLog
             {
                 MessageBox.Show($"Database connection error: \n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            finally
+            /*finally
             {
                 if (connection.State == ConnectionState.Open)
                 {
                     connection.Close(); 
                 }
-            }
+            }*/
         }
 
         private void deleteFromDatabase()
