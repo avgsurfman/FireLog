@@ -25,7 +25,7 @@ namespace Lab2
             this.Source = new List<string>();
             this.Destination = new List<string>();
             this.Transport = new List<string>();
-            
+
 
             this.StatusText.Text = "Welcome.";
 
@@ -45,7 +45,7 @@ namespace Lab2
             this.Transport.Clear();
             fullLogBox.DataSource = null;
             TypeListBox.DataSource = null;
-            
+
             DateListBox.DataSource = null;
             TimeListBox.DataSource = null;
             SourceListBox.DataSource = null;
@@ -147,7 +147,7 @@ namespace Lab2
         }
 
 
-       
+
 
         private void ReadFile(string name)
         {
@@ -245,6 +245,11 @@ namespace Lab2
         {
             AboutForm aboutForm = new AboutForm();
             aboutForm.ShowDialog();
+        }
+
+        private void TransportListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

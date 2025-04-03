@@ -58,7 +58,7 @@
             // TypeListBox
             // 
             TypeListBox.FormattingEnabled = true;
-            TypeListBox.Location = new System.Drawing.Point(11, 406);
+            TypeListBox.Location = new System.Drawing.Point(13, 491);
             TypeListBox.Margin = new System.Windows.Forms.Padding(2);
             TypeListBox.Name = "TypeListBox";
             TypeListBox.Size = new System.Drawing.Size(130, 324);
@@ -67,7 +67,7 @@
             // DateListBox
             // 
             DateListBox.FormattingEnabled = true;
-            DateListBox.Location = new System.Drawing.Point(145, 406);
+            DateListBox.Location = new System.Drawing.Point(147, 491);
             DateListBox.Margin = new System.Windows.Forms.Padding(2);
             DateListBox.Name = "DateListBox";
             DateListBox.Size = new System.Drawing.Size(156, 324);
@@ -76,7 +76,7 @@
             // TimeListBox
             // 
             TimeListBox.FormattingEnabled = true;
-            TimeListBox.Location = new System.Drawing.Point(305, 406);
+            TimeListBox.Location = new System.Drawing.Point(307, 491);
             TimeListBox.Margin = new System.Windows.Forms.Padding(2);
             TimeListBox.Name = "TimeListBox";
             TimeListBox.Size = new System.Drawing.Size(235, 324);
@@ -85,33 +85,34 @@
             // SourceListBox
             // 
             SourceListBox.FormattingEnabled = true;
-            SourceListBox.Location = new System.Drawing.Point(544, 406);
+            SourceListBox.Location = new System.Drawing.Point(546, 491);
             SourceListBox.Margin = new System.Windows.Forms.Padding(2);
             SourceListBox.Name = "SourceListBox";
-            SourceListBox.Size = new System.Drawing.Size(237, 324);
+            SourceListBox.Size = new System.Drawing.Size(295, 324);
             SourceListBox.TabIndex = 4;
             // 
             // DestListBox
             // 
             DestListBox.FormattingEnabled = true;
-            DestListBox.Location = new System.Drawing.Point(785, 406);
+            DestListBox.Location = new System.Drawing.Point(845, 490);
             DestListBox.Margin = new System.Windows.Forms.Padding(2);
             DestListBox.Name = "DestListBox";
-            DestListBox.Size = new System.Drawing.Size(193, 324);
+            DestListBox.Size = new System.Drawing.Size(236, 324);
             DestListBox.TabIndex = 5;
             // 
             // TransportListBox
             // 
             TransportListBox.FormattingEnabled = true;
-            TransportListBox.Location = new System.Drawing.Point(982, 406);
+            TransportListBox.Location = new System.Drawing.Point(1085, 489);
             TransportListBox.Margin = new System.Windows.Forms.Padding(2);
             TransportListBox.Name = "TransportListBox";
             TransportListBox.Size = new System.Drawing.Size(278, 324);
             TransportListBox.TabIndex = 6;
+            TransportListBox.SelectedIndexChanged += TransportListBox_SelectedIndexChanged;
             // 
             // buttonOpenFile
             // 
-            buttonOpenFile.Location = new System.Drawing.Point(1085, 57);
+            buttonOpenFile.Location = new System.Drawing.Point(1188, 57);
             buttonOpenFile.Margin = new System.Windows.Forms.Padding(2);
             buttonOpenFile.Name = "buttonOpenFile";
             buttonOpenFile.Size = new System.Drawing.Size(175, 57);
@@ -127,16 +128,17 @@
             // 
             // fullLogBox
             // 
+            fullLogBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             fullLogBox.FormattingEnabled = true;
             fullLogBox.Location = new System.Drawing.Point(11, 127);
             fullLogBox.Margin = new System.Windows.Forms.Padding(2);
             fullLogBox.Name = "fullLogBox";
-            fullLogBox.Size = new System.Drawing.Size(1249, 228);
+            fullLogBox.Size = new System.Drawing.Size(1350, 247);
             fullLogBox.TabIndex = 8;
             // 
             // LoadButton
             // 
-            LoadButton.Location = new System.Drawing.Point(924, 57);
+            LoadButton.Location = new System.Drawing.Point(1027, 57);
             LoadButton.Margin = new System.Windows.Forms.Padding(2);
             LoadButton.Name = "LoadButton";
             LoadButton.Size = new System.Drawing.Size(157, 57);
@@ -157,7 +159,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(11, 372);
+            label1.Location = new System.Drawing.Point(13, 457);
             label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(65, 32);
@@ -167,7 +169,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(145, 372);
+            label2.Location = new System.Drawing.Point(147, 457);
             label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(64, 32);
@@ -177,7 +179,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(305, 372);
+            label3.Location = new System.Drawing.Point(307, 457);
             label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(67, 32);
@@ -187,7 +189,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(544, 370);
+            label4.Location = new System.Drawing.Point(546, 455);
             label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(87, 32);
@@ -197,7 +199,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new System.Drawing.Point(785, 372);
+            label5.Location = new System.Drawing.Point(845, 457);
             label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new System.Drawing.Size(136, 32);
@@ -207,7 +209,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new System.Drawing.Point(982, 371);
+            label6.Location = new System.Drawing.Point(1085, 455);
             label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new System.Drawing.Size(113, 32);
@@ -220,7 +222,7 @@
             menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { fileToolStripMenuItem, programToolStripMenuItem });
             menuStrip1.Location = new System.Drawing.Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new System.Drawing.Size(1271, 40);
+            menuStrip1.Size = new System.Drawing.Size(1372, 40);
             menuStrip1.TabIndex = 18;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -255,7 +257,7 @@
             // StatusText
             // 
             StatusText.AutoSize = true;
-            StatusText.Location = new System.Drawing.Point(11, 744);
+            StatusText.Location = new System.Drawing.Point(13, 837);
             StatusText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             StatusText.Name = "StatusText";
             StatusText.Size = new System.Drawing.Size(121, 32);
@@ -277,7 +279,7 @@
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1271, 794);
+            ClientSize = new System.Drawing.Size(1372, 895);
             Controls.Add(label7);
             Controls.Add(StatusText);
             Controls.Add(label6);
